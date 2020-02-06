@@ -1,5 +1,7 @@
 # Face recognition app with React, Node/Express and Clarifai api
 
+The backend/APIs for this app can be found here https://github.com/paniciu/facerec-api
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts

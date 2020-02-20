@@ -1,11 +1,11 @@
 import React from 'react';
 import './ImageLinkForm.css';
 
-const ImageLinkForm = ({ onInputChange, onButtonSubmit }) => {
+const ImageLinkForm = ({ onInputChange, onButtonSubmit, detected }) => {
     return (
         <div>
             <p className='f3'>
-                {'This App will detect faces in you pictures, currently detecting only 1 face :)'}
+                {`This App will detect faces in you pictures, currently detecting ${ detected } faces :)`}
             </p>
             <div className='center'>
                 <div className='form center pa4 br3 shadow-5'>

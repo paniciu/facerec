@@ -24,7 +24,8 @@ const particleConf = {
 const initialState = {
     input: '',
     imageUrl: '',
-    box: {},
+    boxes: [],
+    detected: 0,
     route: 'signin',
     isSignedIn: false,
     user: {
@@ -53,20 +54,23 @@ class App extends Component {
   }
 
   calculateFaceLocation = (data) => {
-    const clarifaiFace = data.outputs[0].data.regions[0].region_info.bounding_box;
+    const clariFaces = data.outputs[0].data.regions;
     const image = document.getElementById('inputimage');
     const width = Number(image.width);
     const height = Number(image.height);
-    return {
-      leftCol: clarifaiFace.left_col * width,
-      topRow: clarifaiFace.top_row * height,
-      rightCol: width - (clarifaiFace.right_col * width),
-      bottomRow: height - (clarifaiFace.bottom_row * height)
-    }
+    this.setState({detected: clariFaces.length})
+    return clariFaces.map(face => {
+      return {
+        leftCol: face.region_info.bounding_box.left_col * width,
+        topRow: face.region_info.bounding_box.top_row * height,
+        rightCol: width - (face.region_info.bounding_box.right_col * width),
+        bottomRow: height - (face.region_info.bounding_box.bottom_row * height)
+      }
+    })
   }
 
-  displayFaceBox = (box) => {
-    this.setState({box: box});
+  displayFaceBox = (boxes) => {
+    this.setState({boxes: boxes});
   }
 
   onInputChange = (event) => {
@@ -113,7 +117,7 @@ class App extends Component {
   }
 
   render() {
-    const { isSignedIn, imageUrl, route, box } = this.state;
+    const { isSignedIn, imageUrl, route, boxes, detected } = this.state;
     return (
       <div className="App">
         <Particles className='particles'
@@ -128,8 +132,9 @@ class App extends Component {
             <ImageLinkForm 
               onInputChange={this.onInputChange}
               onButtonSubmit={this.onButtonSubmit}
+              detected={detected}
             />
-            <FaceRecognition box={box} imageUrl={imageUrl} />
+            <FaceRecognition boxes={boxes} imageUrl={imageUrl} />
          </div>
          : (
            route === 'signin'
